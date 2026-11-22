@@ -1,0 +1,94 @@
+LAMMPS (27 Oct 2021)
+clear
+units		metal
+atom_style atomic
+dimension	3
+boundary	p p p
+
+atom_modify 	map array
+
+variable 	a0 	equal 	(1015/1000.0)*2.8665
+variable	vol	equal	${a0}*${a0}*${a0}
+variable	vol	equal	2.9094975*${a0}*${a0}
+variable	vol	equal	2.9094975*2.9094975*${a0}
+variable	vol	equal	2.9094975*2.9094975*2.9094975
+variable 	n0 	equal  1
+lattice 	bcc ${a0}
+lattice 	bcc 2.9094975
+Lattice spacing in x,y,z = 2.9094975 2.9094975 2.9094975
+region		box block 0.0 ${n0} 0.0 ${n0} 0.0 ${n0}
+region		box block 0.0 1 0.0 ${n0} 0.0 ${n0}
+region		box block 0.0 1 0.0 1 0.0 ${n0}
+region		box block 0.0 1 0.0 1 0.0 1
+create_box 	1 box
+Created orthogonal box = (0.0000000 0.0000000 0.0000000) to (2.9094975 2.9094975 2.9094975)
+  1 by 1 by 1 MPI processor grid
+create_atoms 	1 box
+Created 2 atoms
+  using lattice units in orthogonal box = (0.0000000 0.0000000 0.0000000) to (2.9094975 2.9094975 2.9094975)
+  create_atoms CPU = 0.000 seconds
+
+mass		1 55.845
+
+#Define Potential
+pair_style 	hybrid/overlay eam/alloy
+pair_coeff 	* * eam/alloy Fe_Mishin2006.eam.alloy Fe
+
+neighbor     0.1 bin
+neigh_modify     every 10 check yes delay 20
+
+
+thermo_style custom etotal
+thermo       1
+
+variable        etotal0   equal etotal/(${n0}*${n0}*${n0})
+variable        etotal0   equal etotal/(1*${n0}*${n0})
+variable        etotal0   equal etotal/(1*1*${n0})
+variable        etotal0   equal etotal/(1*1*1)
+run	0
+WARNING: No fixes with time integration, atoms won't move (../verlet.cpp:60)
+Neighbor list info ...
+  update every 10 steps, delay 20 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.773367
+  ghost atom cutoff = 5.773367
+  binsize = 2.8866835, bins = 2 2 2
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.211 | 3.211 | 3.211 Mbytes
+TotEng 
+  -8.5343709 
+Loop time of 7.83e-07 on 1 procs for 0 steps with 2 atoms
+
+127.7% CPU use with 1 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 7.83e-07   |            |       |100.00
+
+Nlocal:        2.00000 ave           2 max           2 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:        187.000 ave         187 max         187 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:        58.0000 ave          58 max          58 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 58
+Ave neighs/atom = 29.000000
+Neighbor list builds = 0
+Dangerous builds = 0
+
+print	"${vol} ${etotal0}" file energy_1015.dat
+24.6294075435027 -8.53437091904452
+
+Total wall time: 0:00:00

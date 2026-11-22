@@ -1,0 +1,6 @@
+Critical-law fit: m(T) = (1 - T/Tc)^beta
+------------------------------------------------
+Tc   = 900.083 +/- 0.030 K
+beta = 0.3316 +/- 0.0029
+R2= 0.999689620559066
+Plot saved as: magnetization_vs_temperature.png

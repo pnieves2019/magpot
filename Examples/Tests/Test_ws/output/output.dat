@@ -1,0 +1,15 @@
+EOS FM state:
+B0 (GPa) = 21.61823210032724 GPa
+E0 (eV) = -1.1039287551666512
+v_FM (A^3)= 23.8317773196831
+dB0= 3.4670309249334186
+------------------
+EOS Paramagnetic state:
+B0p (GPa) = 22.62647831922209 GPa
+E0p (eV) = -1.0699664015939274
+v_PM (A^3) = 23.56219650063099
+dB0p= 3.3204219853864445
+----------------
+Spontaneous volume magnetostriction:
+ws = (v_FM-v_PM)/v_PM =  0.01144124313897857
+Plot saved as: ws.png

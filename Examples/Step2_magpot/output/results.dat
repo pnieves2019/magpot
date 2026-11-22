@@ -1,0 +1,22 @@
+##############################
+MAGPOT code (version 1.0)
+##############################
+Authors: P.Nieves, I.Korniienko, S.Arapan, A.Fraile, R.Iglesias and D.Legut
+Reading data ...
+Program output format = lmp
+Crystal system = bcc
+Magnetic order = fm
+Nearest neighbor distance at equilibrium volume without magnetic interactions in units of A = 2.482458435
+Bulk modulus =  178.762  GPa
+Curie or Neel temperature =  1043.0  K
+Spontaneous volume magnetostriction =  0.0116
+First magnetocrystalline anisotropy K1 =  55000.0  J/m^3
+(1/K1)*(dK1/dP) =  -0.073  1/GPa
+First anisotropic magnetoelastic constant b1 =  -3.3  MPa
+Second anisotropic magnetoelastic constant b2 =  10.5  MPa
+----------------------------------------
+RESULTS FOR BETHE-SLATER PARAMETERS:
+----------------------------------------
+pair_coeff  * * spin/exchange exchange  2.6744772631993072 -0.015938382390086922 2.4370720984331284 2.482458435  offset no
+pair_coeff  * * spin/neel neel  2.6744772631993072 0.00038774818264079023 0.8405797101449275 2.482458435 3.102249986870197e-05 1.0498145925771576 2.482458435
+ 

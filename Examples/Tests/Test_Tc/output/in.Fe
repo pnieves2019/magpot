@@ -1,0 +1,74 @@
+# bcc Fe in a 3d periodic box
+
+clear 
+units		metal
+atom_style 	spin
+
+dimension 	3
+boundary 	p p p
+
+# necessary for the serial algorithm (sametag)
+atom_modify 	map array 
+
+# lattice bcc 	2.86649609
+# region box 	block 0.0 10.0 0.0 10.0 0.0 10.0
+# create_box 	1 box
+# create_atoms 	1 box
+
+read_restart	restart_Fe.equil0
+
+# setting mass, mag. moments, and interactions for fcc cobalt
+
+mass		1 55.845
+
+set 		group all spin 2.2 0.0 0.0 1.0
+#velocity 	all create tempe 4928459 rot yes dist gaussian
+
+pair_style hybrid/overlay eam/alloy spin/exchange 2.674 spin/neel 2.674
+pair_coeff 	* * eam/alloy Fe_Mishin2006.eam.alloy Fe
+######## MAGPOT DATA HERE ############
+pair_coeff  * * spin/exchange exchange  2.6744772631993072 -0.015938382390086922 2.4370720984331284 2.482458435  offset no
+pair_coeff  * * spin/neel neel  2.6744772631993072 0.00038774818264079023 0.8405797101449275 2.482458435 3.102249986870197e-05 1.0498145925771576 2.482458435
+######################################
+
+neighbor 	0.1 bin
+neigh_modify 	every 10 check yes delay 20
+
+fix 		1 all precession/spin zeeman 0.0 0.0 0.0 1.0
+fix_modify 	1 energy yes
+
+variable        t_bath     equal tempe
+variable        t_damp     equal 0.8
+
+fix 	3 all langevin/spin ${t_bath} ${t_damp} 201
+
+fix 	4 all nve/spin lattice no
+
+timestep	0.001
+
+
+# compute and output options
+
+compute 	out_mag    all spin
+compute 	out_temp   all temp
+
+thermo_style	custom f_1
+
+variable 	magx      equal c_out_mag[1]
+variable 	magy      equal c_out_mag[2]
+variable 	magz      equal c_out_mag[3]
+variable 	magnorm   equal c_out_mag[4]
+variable 	emag      equal c_out_mag[5]
+variable 	tmag      equal c_out_mag[6]
+variable        temp0     equal temp
+variable        time0     equal time
+variable        etotal0   equal etotal
+
+thermo_style    custom step time f_1 v_magx v_magy v_magz v_magnorm v_emag temp v_tmag v_emag etotal
+thermo          1000
+
+fix             savpos all print 5000 "${time0} ${temp0} ${tmag} ${magx} ${magy} ${magz} ${magnorm} ${emag} ${etotal0}" file output.dat
+
+run 		30000
+
+write_restart 	restart_Fe.equil

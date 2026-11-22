@@ -1,0 +1,200 @@
+LAMMPS (27 Oct 2021)
+# bcc Fe in a 3d periodic box
+
+clear
+units		metal
+atom_style 	spin
+
+dimension 	3
+boundary 	p p p
+
+# necessary for the serial algorithm (sametag)
+atom_modify 	map array
+
+# lattice bcc 	2.86649609
+# region box 	block 0.0 10.0 0.0 10.0 0.0 10.0
+# create_box 	1 box
+# create_atoms 	1 box
+
+read_restart	restart_Fe.equil0
+Reading restart file ...
+  restart file = 27 Oct 2021, LAMMPS = 27 Oct 2021
+  restoring atom style spin from restart
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (28.664961 28.664961 28.664961)
+  1 by 1 by 1 MPI processor grid
+  pair style hybrid/overlay stores no restart info
+  2000 atoms
+  read_restart CPU = 0.002 seconds
+
+# setting mass, mag. moments, and interactions for fcc cobalt
+
+mass		1 55.845
+
+set 		group all spin 2.2 0.0 0.0 1.0
+Setting atom values ...
+  2000 settings made for spin
+#velocity 	all create 900 4928459 rot yes dist gaussian
+
+pair_style hybrid/overlay eam/alloy spin/exchange 2.674 spin/neel 2.674
+pair_coeff 	* * eam/alloy Fe_Mishin2006.eam.alloy Fe
+######## MAGPOT DATA HERE ############
+pair_coeff  * * spin/exchange exchange  2.6744772631993072 -0.015938382390086922 2.4370720984331284 2.482458435  offset no
+pair_coeff  * * spin/neel neel  2.6744772631993072 0.00038774818264079023 0.8405797101449275 2.482458435 3.102249986870197e-05 1.0498145925771576 2.482458435
+######################################
+
+neighbor 	0.1 bin
+neigh_modify 	every 10 check yes delay 20
+
+fix 		1 all precession/spin zeeman 0.0 0.0 0.0 1.0
+fix_modify 	1 energy yes
+
+variable        t_bath     equal 900
+variable        t_damp     equal 0.8
+
+fix 	3 all langevin/spin ${t_bath} ${t_damp} 201
+fix 	3 all langevin/spin 900 ${t_damp} 201
+fix 	3 all langevin/spin 900 0.8 201
+
+fix 	4 all nve/spin lattice no
+
+timestep	0.001
+
+
+# compute and output options
+
+compute 	out_mag    all spin
+compute 	out_temp   all temp
+
+thermo_style	custom f_1
+
+variable 	magx      equal c_out_mag[1]
+variable 	magy      equal c_out_mag[2]
+variable 	magz      equal c_out_mag[3]
+variable 	magnorm   equal c_out_mag[4]
+variable 	emag      equal c_out_mag[5]
+variable 	tmag      equal c_out_mag[6]
+variable        temp0     equal temp
+variable        time0     equal time
+variable        etotal0   equal etotal
+
+thermo_style    custom step time f_1 v_magx v_magy v_magz v_magnorm v_emag temp v_tmag v_emag etotal
+thermo          1000
+
+fix             savpos all print 5000 "${time0} ${temp0} ${tmag} ${magx} ${magy} ${magz} ${magnorm} ${emag} ${etotal0}" file output.dat
+
+run 		30000
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- fix nve/spin command:
+
+@article{tranchida2018massively,
+title={Massively parallel symplectic algorithm for coupled magnetic spin dynamics and molecular dynamics},
+author={Tranchida, J and Plimpton, SJ and Thibaudeau, P and Thompson, AP},
+journal={Journal of Computational Physics},
+volume={372},
+pages={406-425},
+year={2018},
+publisher={Elsevier}
+doi={10.1016/j.jcp.2018.06.042}
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+WARNING: No fixes with time integration, atoms won't move (../verlet.cpp:60)
+Neighbor list info ...
+  update every 10 steps, delay 20 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.773367
+  ghost atom cutoff = 5.773367
+  binsize = 2.8866835, bins = 10 10 10
+  3 neighbor lists, perpetual/occasional/extra = 3 0 0
+  (1) pair eam/alloy, perpetual, half/full from (2)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (2) pair spin/exchange, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+  (3) pair spin/neel, perpetual, copy from (2)
+      attributes: full, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+0 0 3.52939306772226e-35 0 0 1 1 -269.63787746508 -8829.63801592667
+Per MPI rank memory allocation (min/avg/max) = 7.032 | 7.032 | 7.032 Mbytes
+Step Time f_1 v_magx v_magy v_magz v_magnorm v_emag Temp v_tmag v_emag TotEng 
+  270000            0            0            0            0            1            1   -269.63788            0 3.5293931e-35   -269.63788    -8829.638 
+  271000            1            0  -0.17984501 -0.0038362241  0.048450199   0.18629645   -69.420969            0    844.14474   -69.420969   -8629.4211 
+  272000            2            0  -0.21621573 -0.014247669  0.049275639   0.22221685   -67.950423            0    833.71265   -67.950423   -8627.9506 
+  273000            3            0 -0.033969579 -0.014200448   0.16582508    0.1698633   -69.152789            0    783.75736   -69.152789   -8629.1529 
+  274000            4            0 -0.021727717 -0.058256804   0.21578863   0.22456776   -72.900512            0    768.37694   -72.900512   -8632.9007 
+5 0 811.034559149134 -0.190457040211809 0.00729489186159043 0.0591158500902125 0.199553960986505 -71.6783612440344 -8631.67849970565
+  275000            5            0  -0.19045704 0.0072948919   0.05911585   0.19955396   -71.678361            0    811.03456   -71.678361   -8631.6785 
+  276000            6            0 -0.094126415   -0.2137851  0.056195994    0.2402537   -71.298328            0    838.67781   -71.298328   -8631.2985 
+  277000            7            0  0.033887365  -0.15619312  -0.11285316   0.19565398    -66.72022            0     844.2429    -66.72022   -8626.7204 
+  278000            8            0  0.076248887  -0.23545259 -0.031081233   0.24943507   -70.596077            0    795.76891   -70.596077   -8630.5962 
+  279000            9            0    0.1041085   0.02961978  -0.13681513   0.17445427   -68.919153            0    783.06296   -68.919153   -8628.9193 
+10 0 817.440655864553 0.053435221784227 0.072529005906304 0.0343272781867325 0.096406128708685 -63.5084724504362 -8623.50861091205
+  280000           10            0  0.053435222  0.072529006  0.034327278  0.096406129   -63.508472            0    817.44066   -63.508472   -8623.5086 
+  281000           11            0  -0.16576492  0.095601165  0.049324668   0.19761203   -62.900136            0    875.05955   -62.900136   -8622.9003 
+  282000           12            0  0.097413518  -0.13609183 -0.017333703   0.16825824   -64.558674            0    838.63265   -64.558674   -8624.5588 
+  283000           13            0   0.21765348  -0.17450247 -0.070790134   0.28781139    -75.04515            0    818.14708    -75.04515   -8635.0453 
+  284000           14            0  0.062230759   -0.1741101  -0.04365277   0.18998042   -67.182624            0    836.36252   -67.182624   -8627.1828 
+15 0 783.15461790825 0.0119445432183329 -0.173552003960724 -0.0902404114093361 0.195975258751721 -72.9426736319403 -8632.94281209356
+  285000           15            0  0.011944543    -0.173552 -0.090240411   0.19597526   -72.942674            0    783.15462   -72.942674   -8632.9428 
+  286000           16            0  0.096525299  -0.28986626   0.04072052   0.30821704   -74.667845            0    835.99745   -74.667845    -8634.668 
+  287000           17            0 -0.042801946  -0.17270663  0.090106608    0.1994462   -67.761793            0    803.02491   -67.761793   -8627.7619 
+  288000           18            0   0.12189421  -0.20275725  0.078890478   0.24938406    -67.15696            0    850.81353    -67.15696   -8627.1571 
+  289000           19            0   0.19742576  -0.13312251   0.10657851   0.26087835   -74.431107            0    799.30372   -74.431107   -8634.4312 
+20 0 748.64364495177 0.152309810179756 -0.194191282128891 -0.0455006048876931 0.25095584746525 -76.3636965683526 -8636.36383502997
+  290000           20            0   0.15230981  -0.19419128 -0.045500605   0.25095585   -76.363697            0    748.64364   -76.363697   -8636.3638 
+  291000           21            0 0.00028251035  -0.20866135 -0.082067095   0.22422008   -68.610495            0    813.90609   -68.610495   -8628.6106 
+  292000           22            0  0.028464557  -0.24562894   0.19220217   0.31318602   -82.126986            0    783.39778   -82.126986   -8642.1271 
+  293000           23            0 -0.099652976  -0.20486828   0.17389303   0.28660167   -80.509741            0    784.13897   -80.509741   -8640.5099 
+  294000           24            0 -0.068235743  -0.13319096 -0.026909093   0.15205278   -62.592757            0     840.5407   -62.592757   -8622.5929 
+25 0 804.25453651971 0.0762240474539992 -0.0608490485831177 -0.085708617100252 0.129840976463433 -68.3879514751398 -8628.38808993676
+  295000           25            0  0.076224047 -0.060849049 -0.085708617   0.12984098   -68.387951            0    804.25454   -68.387951   -8628.3881 
+  296000           26            0 -0.094500166  -0.11571225  -0.13754969   0.20307517   -71.140076            0    805.94143   -71.140076   -8631.1402 
+  297000           27            0  -0.10673245 -0.039177712 -0.029680908   0.11750602   -67.144109            0    792.31367   -67.144109   -8627.1442 
+  298000           28            0   0.13894633 -0.063967088  0.059881749   0.16426714   -68.027724            0    803.07139   -68.027724   -8628.0279 
+  299000           29            0  0.088884114 -0.026051085   0.13531506    0.1639793   -67.219362            0    795.12551   -67.219362   -8627.2195 
+30 0 835.277556894997 0.00450154322153141 0.025624693576584 0.0377839275277218 0.0458749821982447 -62.5947225702907 -8622.59486103191
+  300000           30            0 0.0045015432  0.025624694  0.037783928  0.045874982   -62.594723            0    835.27756   -62.594723   -8622.5949 
+Loop time of 726.631 on 1 procs for 30000 steps with 2000 atoms
+
+Performance: 3.567 ns/day, 6.728 hours/ns, 41.286 timesteps/s
+100.0% CPU use with 1 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 240.42     | 240.42     | 240.42     |   0.0 | 33.09
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 6.4164     | 6.4164     | 6.4164     |   0.0 |  0.88
+Output  | 0.004346   | 0.004346   | 0.004346   |   0.0 |  0.00
+Modify  | 478.98     | 478.98     | 478.98     |   0.0 | 65.92
+Other   |            | 0.8126     |            |       |  0.11
+
+Nlocal:        2000.00 ave        2000 max        2000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:        4119.00 ave        4119 max        4119 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:        64000.0 ave       64000 max       64000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:      128000.0 ave      128000 max      128000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 128000
+Ave neighs/atom = 64.000000
+Neighbor list builds = 0
+Dangerous builds = 0
+
+write_restart 	restart_Fe.equil
+System init for write_restart ...
+Total wall time: 0:12:06

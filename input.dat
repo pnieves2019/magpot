@@ -1,0 +1,25 @@
+############################
+# INPUT DATA FILE FOR MAGPOT
+############################
+#Program output format: LAMMPS (lmp)  
+lmp
+#Crystal symmetry supported systems simple cubic (sc), body-centerd cubic (bcc) and face-centered cubic (fcc) 
+fcc
+# Magnetic order ferromagnetic (fm) or antiferromagnetic (afm)
+afm 
+# Nearest neighbor distance at equilbrium volume without magnetic interactions in units of A
+3.00259
+# Bulk modulus without magnetic interactions in unis of GPa
+226.91
+# Curie or Neel temperature in units of K
+405.0
+# Spontaneous volume magnetostriction w_s at T=0K
+-7.6e-3 
+# First magnetocrystalline anisotropy K1 at T=0K in units J/m^3
+36136.0
+# (1/K1)*(dK1/dP) at T=0K in units of 1/GPa
+0.20499
+# First anisotropic magnetoelastic constant b1 at T=0K in MPa
+5.9418 
+# Second anisotropic magnetoelastic constant b2 at T=0K in MPa
+-11.3962448
