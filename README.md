@@ -95,7 +95,7 @@ After comment lines (beginning with `#`) are ignored, `input.dat` must contain *
 | `Tord` | Curie temperature for FM order or Néel temperature for AFM order | K |
 | `ws` | Spontaneous volume magnetostriction at zero temperature | Dimensionless |
 | `K1` | First magnetocrystalline-anisotropy constant at zero temperature | J m⁻³ |
-| `eta` | Relative pressure derivative of `K1`, \(\eta = K_1^{-1}\,\partial K_1/\partial P\) | GPa⁻¹ |
+| `eta` | Relative pressure derivative of `K1`, $\eta = K_1^{-1}\,\partial K_1/\partial P$ | GPa⁻¹ |
 | `b1` | First anisotropic magnetoelastic constant | MPa |
 | `b2` | Second anisotropic magnetoelastic constant | MPa |
 
