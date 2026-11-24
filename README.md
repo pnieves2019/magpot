@@ -8,8 +8,9 @@
 
 MagPot is a Python program that generates Bethe–Slater parameters for magnetic interactions in spin–lattice molecular dynamics simulations using the **SPIN** package of **LAMMPS**.
 
-**Current release:** [MagPot v1.0](https://github.com/pnieves2019/magpot/releases/tag/v1.0)  
+**Current release:** [MagPot v1.0.1](https://github.com/pnieves2019/magpot/releases/tag/v1.0.1)  
 **License:** [MIT](LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24503736.svg)](https://doi.org/10.5281/zenodo.24503736)
 
 ## Overview
 
@@ -24,7 +25,7 @@ This approach allows the magnetic contribution to be used with different compati
 
 ## Supported crystal structures and magnetic orders
 
-Version 1.0 supports the following cubic lattice and collinear magnetic-order combinations:
+Version 1.0.1 supports the following cubic lattice and collinear magnetic-order combinations:
 
 | Crystal structure | Magnetic order | Configuration |
 |---|---|---|
@@ -37,7 +38,7 @@ Version 1.0 supports the following cubic lattice and collinear magnetic-order co
 
 **Important note on FCC-AFM (type II).** For this configuration, MagPot retains the six antiparallel second-neighbour interactions, which form the nearest-neighbour shell of each of four interpenetrating simple-cubic networks. First-neighbour interactions and interactions between different networks are neglected. The corresponding LAMMPS structure must use four atom types to identify the four networks. These atom types identify crystallographic networks, not spin directions; spin vectors must be assigned independently. See the User Manual and the article for details.
 
-Version 1.0 is limited to the structures and magnetic orders listed above. It does not generate potentials for non-cubic structures or general non-collinear magnetic configurations.
+Version 1.0.1 is limited to the structures and magnetic orders listed above. It does not generate potentials for non-cubic structures or general non-collinear magnetic configurations.
 
 ## Repository contents
 
@@ -63,12 +64,12 @@ MagPot itself generates the parameters and LAMMPS commands; LAMMPS is required f
 Clone the repository and install the Python dependency:
 
 ```bash
-git clone --branch v1.0 --single-branch https://github.com/pnieves2019/magpot.git
+git clone --branch v1.0.1 --single-branch https://github.com/pnieves2019/magpot.git
 cd magpot
 python3 -m pip install -r requirements.txt
 ```
 
-Alternatively, download the source archive from the [v1.0 release page](https://github.com/pnieves2019/magpot/releases/tag/v1.0).
+Alternatively, download the source archive from the [v1.0.1 release page](https://github.com/pnieves2019/magpot/releases/tag/v1.0.1).
 
 ## Quick start
 
@@ -127,7 +128,7 @@ P. Nieves, I. Korniienko, S. Arapan, A. Fraile, R. Iglesias and D. Legut, *MagPo
 [https://doi.org/10.48550/arXiv.2611.29574](https://doi.org/10.48550/arXiv.2611.29574).
 
 **Software version**  
-MagPot v1.0, [GitHub release](https://github.com/pnieves2019/magpot/releases/tag/v1.0).
+MagPot v1.0.1, [GitHub release](https://github.com/pnieves2019/magpot/releases/tag/v1.0.1).
 
 ## License
 
