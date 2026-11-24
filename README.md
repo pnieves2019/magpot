@@ -10,6 +10,7 @@ MagPot is a Python program that generates Bethe–Slater parameters for magnetic
 
 **Current release:** [MagPot v1.0.1](https://github.com/pnieves2019/magpot/releases/tag/v1.0.1)  
 **License:** [MIT](LICENSE)
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24503736.svg)](https://doi.org/10.5281/zenodo.24503736)
 
 ## Overview
