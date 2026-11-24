@@ -122,8 +122,9 @@ The [`Examples/`](Examples/) directory contains example calculations and LAMMPS 
 
 If you use MagPot in published work, please cite the associated article/preprint and identify the software version used.
 
-**Preprint submitted to arXiv**  
-P. Nieves, I. Korniienko, S. Arapan, A. Fraile, R. Iglesias and D. Legut, *MagPot: A magnetoelastic potential generator for molecular dynamics simulations*.
+**Preprint in arXiv**  
+P. Nieves, I. Korniienko, S. Arapan, A. Fraile, R. Iglesias and D. Legut, *MagPot: A magnetoelastic potential generator for molecular dynamics simulations*. arXiv:2611.29574 (2026)
+[https://doi.org/10.48550/arXiv.2611.29574](https://doi.org/10.48550/arXiv.2611.29574).
 
 **Software version**  
 MagPot v1.0, [GitHub release](https://github.com/pnieves2019/magpot/releases/tag/v1.0).
